@@ -1,0 +1,192 @@
+:root {
+  /* brand palette — from logo (spiral galaxy) */
+  --teal: #00fcc1;
+  --cyan: #20a8e8;
+  --blue: #2b5cff;
+  --deep: #1b3fd0;
+  --violet: #b46cff;
+
+  --bg: #05060f;
+  --bg-2: #090b1a;
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.18);
+
+  --text: #eef1f8;
+  --text-dim: #9aa3b8;
+  --text-faint: #6b7388;
+
+  --font-display: 'Rubik', 'Segoe UI', system-ui, sans-serif;
+  --font-brand: 'Unbounded', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+
+  --maxw: 1200px;
+  --radius: 18px;
+  --radius-sm: 12px;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 0.5s;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* section rhythm */
+.section {
+  position: relative;
+  padding: clamp(72px, 10vw, 140px) 0;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.section-title {
+  font-size: clamp(30px, 5vw, 56px);
+  margin-top: 14px;
+}
+
+.section-lead {
+  margin-top: 18px;
+  max-width: 620px;
+  color: var(--text-dim);
+  font-size: clamp(15px, 2vw, 18px);
+}
+
+/* gradient text helper */
+.grad {
+  background: linear-gradient(100deg, var(--teal), var(--cyan) 40%, var(--violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* animated gradient text — медленный бесшовный перелив (FUNCLUB и т.п.).
+   Концы градиента teal==teal + сдвиг ровно на ширину тайла (200%) → нет скачка. */
+.grad-flow {
+  background-image: linear-gradient(
+    100deg,
+    var(--teal),
+    var(--cyan) 30%,
+    var(--violet) 55%,
+    var(--blue) 75%,
+    var(--teal)
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradFlow 8s linear infinite;
+}
+@keyframes gradFlow {
+  to { background-position: 200% center; }
+}
+
+/* RotatingText: слова стопкой в одной grid-ячейке, видно текущее.
+   Ширину морфит GSAP, overflow прячет вылетающие слова. */
+.rotating-text {
+  display: inline-grid;
+  vertical-align: bottom;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.rotating-text > span {
+  grid-area: 1 / 1;
+  will-change: transform, opacity, filter;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rotating-text {
+    width: auto !important;
+  }
+}
+
+/* доступно только скринридеру */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* reveal-on-scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
