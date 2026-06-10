@@ -132,6 +132,11 @@ export function Iridescence({
           container.addEventListener('mousemove', onMouseMove)
         }
 
+        // рисуем первый кадр в ещё не вставленную канву, чтобы она
+        // появилась в DOM уже с содержимым (иначе на части GPU/ANGLE
+        // первый неотрисованный кадр мигает чёрным при монтировании)
+        renderer.render({ scene: mesh })
+
         canvas = gl.canvas
         canvas.style.width = '100%'
         canvas.style.height = '100%'
@@ -146,6 +151,9 @@ export function Iridescence({
           renderer.render({ scene: mesh })
           return
         }
+
+        // первый кадр уже отрисован выше (до appendChild), поэтому канва
+        // входит в DOM с готовым содержимым — без чёрного мига на свежем WebGL
 
         // крутим шейдер только когда вкладка активна И фон в зоне видимости —
         // иначе на слабых устройствах это лишний нагрев и жор батареи впустую
