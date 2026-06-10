@@ -584,9 +584,6 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  /* шапка композитится отдельным слоем поверх анимирующегося blend-фона —
-     убирает «шлейф» за цветным заголовком и лого при скролле */
-  transform: translateZ(0);
 }
 .card__title {
   font-size: 22px;
@@ -774,11 +771,8 @@
   position: absolute;
   inset: 0;
   opacity: 0.42;
-  mix-blend-mode: screen;
-  /* собственный GPU-слой: анимирующийся blend не реригает контент над собой,
-     иначе яркий текст/лого оставляют тёмный «шлейф» при скролле */
-  will-change: transform;
-  transform: translateZ(0);
+  /* без mix-blend-mode: screen — он давал тёмный «шлейф» за цветным
+     контентом при скролле (blend нельзя изолировать в отдельный слой) */
   -webkit-mask-image: radial-gradient(135% 125% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.6) 58%, transparent 92%);
   mask-image: radial-gradient(135% 125% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.6) 58%, transparent 92%);
 }
